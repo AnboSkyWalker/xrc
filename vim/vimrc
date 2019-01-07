@@ -1,0 +1,176 @@
+" source %
+" PluginInstall
+set runtimepath+=~/.vim_runtime
+
+source ~/.vim_runtime/vimrcs/basic.vim
+source ~/.vim_runtime/vimrcs/filetypes.vim
+source ~/.vim_runtime/vimrcs/plugins_config.vim
+source ~/.vim_runtime/vimrcs/extended.vim
+
+try
+source ~/.vim_runtime/my_configs.vim
+catch
+endtry
+
+" ##################################################################
+
+set nocompatible              " required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" add all your plugins here (note older versions of Vundle
+" used Bundle instead of Plugin)
+"
+Plugin 'scrooloose/nerdtree'
+
+Plugin 'tmhedberg/SimpylFold'
+Plugin 'jistr/vim-nerdtree-tabs'
+
+Plugin 'vim-syntastic/syntastic'
+Plugin 'nvie/vim-flake8'
+Plugin 'vim-scripts/indentpython.vim'
+Plugin 'Valloric/YouCompleteMe'
+
+Plugin 'L9'
+Plugin 'fatih/vim-go'
+
+" file browsing
+Plugin 'jnurmine/Zenburn'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'joshdick/onedark.vim'
+Plugin 'dracula/vim'
+
+" searching
+Plugin 'kien/ctrlp.vim'
+
+" git
+Plugin 'tpope/vim-fugitive'
+
+" status bar
+Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+
+Plugin 'aperezdc/vim-template'
+
+" ...
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+
+" for ide
+
+"Flagging Unnecessary Whitespace
+highlight BadWhitespace ctermbg=red guibg=darkred
+"au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h,*.go,*.js,*.cpp,*.java,*.kt,*.html,*.css,*.json match BadWhitespace /\s\+$/
+
+set splitbelow
+set splitright
+"split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
+" Enable folding with the spacebar
+nnoremap <space> za
+
+" Try this if you want to see the docstrings for folded code
+"let g:SimpylFold_docstring_preview=1
+
+" YouCompleteMe
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" run command :let mapleader to show leader key, default is ,
+"map <ctrl>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/c/.ycm_extra_conf.py'
+
+
+" PYTHON BEGIN
+let g:ycm_server_python_interpreter='/usr/bin/python'
+au BufNewFile,BufRead *.py
+\ set tabstop=4 |
+\ set softtabstop=4 |
+\ set shiftwidth=4 |
+\ set textwidth=0 | " standard is 79, but if is more than 79 then will auto wrap
+\ set expandtab |
+\ set autoindent |
+\ set fileformat=unix |
+
+let python_highlight_all=1
+
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+
+" PYTHON END
+
+au BufNewFile,BufRead *.js, *.html, *.css *.json *.xml
+\ set tabstop=2
+  \ set softtabstop=2
+  \ set shiftwidth=2
+
+
+" golang
+" end golang
+
+" for ide end
+
+" template start
+let g:templates_directory = ['/home/anbo/.vim/templates',]
+let g:templates_user_variables = [['EMAIL', 'GetMail']]
+" rm ~/.vim/bundle/vim-template/templates/=template=.go
+" it conflict with vim-go
+
+function GetMail()
+    return 'yelong@huawei.com'
+endfunction
+
+" template end
+
+
+" color
+if has('gui_running')
+set background=dark
+colorscheme solarized
+else
+set background=dark
+	"colorscheme zenburn
+  "colorscheme onedark
+  colorscheme dracula
+endif
+" change color
+call togglebg#map("<F5>")
+
+" file browsing
+autocmd vimenter * NERDTree
+let g:NERDTreeWinPos = "left"
+map <C-n> :NERDTreeToggle<CR>
+map <Leader>n <plug>NERDTreeTabsToggle<CR>
+
+" default focus editor area
+autocmd VimEnter * NERDTree
+wincmd w
+autocmd VimEnter * wincmd w
+
+"set clipboard=unnamed
+set clipboard=unnamedplus
+syntax on
+set fileformat=unix
+set guifont=Monaco:h13 
+set encoding=utf-8
+set nu " line number
+set ts=2
+set ruler " column number
